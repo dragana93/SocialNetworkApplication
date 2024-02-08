@@ -1,18 +1,20 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SocialNetworkApp.Data;
+using SocialNetworkApp.Extensions;
+using SocialNetworkApp.Interfaces;
+using SocialNetworkApp.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    // options.UseSqlServer("data source=.;database=social_network;Integrated Security=SSPI;persist security info=True;Encrypt=False;");
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddApplicationServices(builder.Configuration);
 
-builder.Services.AddCors();
+builder.Services.AddIdentityServices(builder.Configuration);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,6 +34,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+
+app.UseAuthentication();
+
+app.UseAuthentication();
 
 app.MapControllers();
 
