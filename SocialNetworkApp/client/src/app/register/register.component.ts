@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../services/account-service.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +23,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private accountService: AccountService,
-    // private toastr: ToastrService,
+    private toastr: ToastrService,
     private fb: FormBuilder,
     private router: Router
   ) { }
@@ -68,10 +69,11 @@ export class RegisterComponent implements OnInit {
     console.log(this.registerForm.value)
     this.accountService.register(this.registerForm.value).subscribe(
       (response) => {
-        //this.router.navigateByUrl('/members')
+        this.router.navigateByUrl('/members')
       },
       (error) => {
         console.log('error register', error);
+        this.toastr.error(error.error) 
        // this.validationErrors = error;
       }
     );

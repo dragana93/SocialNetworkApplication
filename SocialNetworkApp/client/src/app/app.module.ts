@@ -11,6 +11,13 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { TextInputComponent } from './forms/text-input/text-input.component';
+import { MemberListComponent } from './members/member-list/member-list.component';
+import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { ListsComponent } from './lists/lists.component';
+import { MessagesComponent } from './messages/messages.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ToastrModule } from 'ngx-toastr';
+import { SharedModule } from './modules/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +25,12 @@ import { TextInputComponent } from './forms/text-input/text-input.component';
     NavComponent,
     HomeComponent,
     RegisterComponent,
-    TextInputComponent
+    TextInputComponent,
+    MemberListComponent,
+    MemberDetailComponent,
+    ListsComponent,
+    MessagesComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +39,7 @@ import { TextInputComponent } from './forms/text-input/text-input.component';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    BsDropdownModule.forRoot()
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
