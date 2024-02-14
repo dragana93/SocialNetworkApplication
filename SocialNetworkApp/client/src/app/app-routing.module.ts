@@ -7,6 +7,8 @@ import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { authGuard } from './guards/auth.guard';
+import { TestErrorComponent } from './errors/test-error/test-error.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,9 +28,9 @@ const routes: Routes = [
       //{ path: 'admin', component: AdminPanelComponent, canActivate: [AdminGuard] },
     ],
   },
-  // { path: 'errors', component: TestErrorsComponent },
-  // { path: 'not-found', component: NotFoundComponent },
-  //{ path: 'server-error', component: ServerErrorComponent },
+   { path: 'error', component: TestErrorComponent },
+   { path: 'not-found', component: NotFoundComponent },
+  { path: 'server-error', component: ServerErrorComponent },
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 ];
 
