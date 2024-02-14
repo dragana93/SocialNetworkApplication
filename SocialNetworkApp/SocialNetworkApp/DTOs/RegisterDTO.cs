@@ -18,7 +18,7 @@ namespace SocialNetworkApp.DTOs
 
 
         //
-        // [StringLength(8, MinimumLength = 4)]
+        [StringLength(8, MinimumLength = 3)]
         [Required] public string Password { get; set; }
     }
 }

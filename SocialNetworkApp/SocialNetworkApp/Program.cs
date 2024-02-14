@@ -1,11 +1,6 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using SocialNetworkApp.Data;
 using SocialNetworkApp.Extensions;
-using SocialNetworkApp.Interfaces;
-using SocialNetworkApp.Services;
-using System.Text;
+using SocialNetworkApp.Middleware;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +16,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
