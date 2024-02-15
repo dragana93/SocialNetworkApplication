@@ -1,32 +1,42 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SocialNetworkApp.Data;
+using SocialNetworkApp.DTOs;
 using SocialNetworkApp.Entities;
+using SocialNetworkApp.Interfaces;
 
 namespace SocialNetworkApp.Controllers
 {
     [Route("api/[controller]")] //    /api/users
     [ApiController]
+
+
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(DataContext context) {
-            _context = context;
+        public UsersController(IUserRepository userRepository, IMapper mapper) {
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            return users;
+            var users = await _userRepository.GetMembersAsync();
+
+            return Ok(users);
+   
         }
 
-        [HttpGet("{id}")] //   api/users/2
-        public async Task<ActionResult<AppUser>>GetUser(int id)
-        {           
-            return await _context.Users.FindAsync(id);
+        [HttpGet("{username}")] //   api/users/2
+        public async Task<ActionResult<MemberDTO>> GetUser(string username)
+        {
+            return await _userRepository.GetMemberAsync(username);
         }
     }
 }

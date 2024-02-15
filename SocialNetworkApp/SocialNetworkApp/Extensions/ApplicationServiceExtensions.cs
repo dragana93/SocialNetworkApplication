@@ -13,7 +13,7 @@ namespace SocialNetworkApp.Extensions
             
 
           //  services.AddScoped<LogUserActivity>();
-           // services.AddScoped<IUserRepository, UserRepository>();
+           
           //  services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
@@ -22,7 +22,8 @@ namespace SocialNetworkApp.Extensions
 
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();
-
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             return services;
         }
     }
