@@ -1,8 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { AccountService } from '../services/account-service.service';
+
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-register',

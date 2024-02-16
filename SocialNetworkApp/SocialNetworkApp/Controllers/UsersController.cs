@@ -8,13 +8,14 @@ using SocialNetworkApp.DTOs;
 using SocialNetworkApp.Entities;
 using SocialNetworkApp.Interfaces;
 
-namespace SocialNetworkApp.Controllers
-{
-    [Route("api/[controller]")] //    /api/users
-    [ApiController]
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace SocialNetworkApp.Controllers;
 
-    public class UsersController : BaseApiController
+//[Authorize]
+public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
@@ -38,5 +39,5 @@ namespace SocialNetworkApp.Controllers
         {
             return await _userRepository.GetMemberAsync(username);
         }
-    }
+    
 }
