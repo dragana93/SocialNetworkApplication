@@ -16,8 +16,6 @@ import { MembersService } from 'src/app/services/members.service';
 export class MemberDetailComponent implements OnInit {
   // @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   member: Member | undefined;
-  // galleryOptions: NgxGalleryOptions[];
-  // galleryImages: NgxGalleryImage[] = [];
   activeTab: TabDirective;
   images: GalleryItem[] = [];
 
@@ -39,19 +37,6 @@ export class MemberDetailComponent implements OnInit {
     // this.route.queryParams.subscribe(params => {
     //   params['tab'] ? this.selectTab(params['tab']) : this.selectTab(0)
     // })
-
-    // this.galleryOptions = [
-    //   {
-    //     width: '500px',
-    //     height: '500px',
-    //     imagePercent: 100,
-    //     thumbnailsColumns: 4,
-    //     imageAnimation: NgxGalleryAnimation.Slide,
-    //     preview: false,
-    //   },
-    // ];
-
-    // this.galleryImages = this.getImages();
   }
 
   loadMember() {
@@ -72,21 +57,9 @@ export class MemberDetailComponent implements OnInit {
   getImages() {
     if (!this.member) return;
     for (const photo of this.member?.photos) {
-      this.images.push(new ImageItem({ src: photo.url, thumb: photo.url, }))
+      this.images.push(new ImageItem({ src: photo.url, thumb: photo.url}))
     }
   }
-
-  // getImages(): NgxGalleryImage[] {
-  //   let imageUrls: NgxGalleryImage[] = [];
-  //   for (let photo of this.member.photos) {
-  //     imageUrls.push({
-  //       small: photo.url,
-  //       medium: photo.url,
-  //       big: photo.url,
-  //     });
-  //   }
-  //   return imageUrls;
-  // }
 
   onTabActivated(data: TabDirective) {
     this.activeTab = data;

@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace SocialNetworkApp.Controllers;
 
-//[Authorize]
+[Authorize]
 public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
