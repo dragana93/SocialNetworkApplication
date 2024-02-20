@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SocialNetworkApp.Data;
+using SocialNetworkApp.Helpers;
 using SocialNetworkApp.Interfaces;
 using SocialNetworkApp.Services;
 
@@ -9,9 +10,7 @@ namespace SocialNetworkApp.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-            //services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             
-
           //  services.AddScoped<LogUserActivity>();
            
           //  services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
@@ -24,6 +23,8 @@ namespace SocialNetworkApp.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<ClaudinarySettings>(config.GetSection("CloudinarySettings"));
+            services.AddScoped<IPhotoService, PhotoService>();
             return services;
         }
     }

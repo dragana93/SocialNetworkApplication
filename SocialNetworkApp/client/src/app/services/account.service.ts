@@ -28,6 +28,16 @@ export class AccountService {
     );
   }
 
+  register(model: any) {
+    return this.http.post(this.baseUrl + 'account/register', model).pipe(
+      map((user: User | any) => {
+        if(user){
+          this.setCurrentUser(user);
+        }
+      })
+    );
+  }
+
   setCurrentUser(user: User){
     user.roles = [];
     const roles = this.getDecodedToken(user.token).role;
@@ -39,16 +49,6 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
-  }
-
-  register(model: any) {
-    return this.http.post(this.baseUrl + 'account/register', model).pipe(
-      map((user: User | any) => {
-        if(user){
-          this.setCurrentUser(user);
-        }
-      })
-    );
   }
 
   getDecodedToken(token: any){
