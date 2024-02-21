@@ -61,7 +61,6 @@ export class PhotoEditorComponent implements OnInit {
   }
 
   initializeUploader() {
-
     this.uploader = new FileUploader({
       url: this.baseUrl + 'users/add-photo',
       authToken: 'Bearer ' + this.user?.token,
@@ -81,9 +80,7 @@ export class PhotoEditorComponent implements OnInit {
         const photo: Photo = JSON.parse(response);
         this.member?.photos.push(photo);
 
-        if (!this.user) return;
-
-        if (photo.isMain) {
+        if (photo.isMain && this.user && this.member) {
           this.user.photoUrl = photo.url;
           this.member.photoUrl = photo.url;
           this.accountService.setCurrentUser(this.user);
