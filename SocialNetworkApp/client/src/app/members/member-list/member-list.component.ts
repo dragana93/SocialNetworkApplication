@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Member } from 'src/app/models/member';
+import { Pagination } from 'src/app/models/pagination';
+import { UserParams } from 'src/app/models/user-params';
+import { AccountService } from 'src/app/services/account.service';
 import { MembersService } from 'src/app/services/members.service';
 
 @Component({
@@ -9,41 +12,49 @@ import { MembersService } from 'src/app/services/members.service';
   styleUrls: ['./member-list.component.css']
 })
 export class MemberListComponent implements OnInit {
-  members$: Observable<Member[]> | undefined;
-  // pagination: Pagination;
-  // userParams: UserParams;
-  // user: User;
+  //members$: Observable<Member[]> | undefined;
+  members: Member[] = [];
+  pagination: Pagination | undefined;
+  userParams: UserParams | undefined;
   genderList = [
     { value: 'male', display: 'Males' },
     { value: 'female', display: 'Females' },
   ];
 
   constructor(private memberService: MembersService) {
-    //this.userParams = this.memberService.getUserParams();
+    this.userParams = this.memberService.getUserParams();
   }
 
   ngOnInit(): void {
-    //this.loadMembers();
-    this.members$ = this.memberService.getMembers();
+    this.loadMembers();
+    //this.members$ = this.memberService.getMembers();
   }
 
-  // loadMembers() {
-  //  //this.memberService.setUserParams(this.userParams);
-  //   this.memberService.getMembers().subscribe((response) => {
-  //     this.members = response;
-  //    // this.pagination = response.pagination;
-  //   });
-  // }
+  loadMembers() {
+    if (this.userParams) {
+      this.memberService.setUserParams(this.userParams);
 
-  // resetFilters() {
-  //   this.userParams = this.memberService.resetUserParams();
-  //   this.loadMembers();
-  // }
+      this.memberService.getMembers(this.userParams).subscribe((response) => {
+        console.log(response.result, response.pagination)
+        if (response.result && response.pagination) {
+          this.members = response.result;
+          this.pagination = response.pagination;
+        }
+      });
+    }
+  }
 
-  // pageChanged(event: any) {
-  //   this.userParams.pageNumber = event.page;
-  //   this.memberService.setUserParams(this.userParams);
-  //   this.loadMembers();
-  // }
+  resetFilters() {
+    this.userParams = this.memberService.resetUserParams();
+    this.loadMembers();
+  }
+
+  pageChanged(event: any) {
+    if (this.userParams && this.userParams?.pageNumber !== event.page) {
+      this.userParams.pageNumber = event.page;
+      this.memberService.setUserParams(this.userParams);
+      this.loadMembers();
+    }
+  }
 
 }

@@ -1,5 +1,7 @@
-﻿using SocialNetworkApp.DTOs;
+﻿using CloudinaryDotNet.Actions;
+using SocialNetworkApp.DTOs;
 using SocialNetworkApp.Entities;
+using SocialNetworkApp.Helpers;
 
 namespace SocialNetworkApp.Interfaces
 {
@@ -14,7 +16,7 @@ namespace SocialNetworkApp.Interfaces
 
         Task<AppUser> GetUserByUsernameAsync(string username);
 
-        Task<IEnumerable<MemberDTO>> GetMembersAsync();
+        Task<PagedList<MemberDTO>> GetMembersAsync(UserParams userParams);
 
         Task<MemberDTO> GetMemberAsync(string username);
 

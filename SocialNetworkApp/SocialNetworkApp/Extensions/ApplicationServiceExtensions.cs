@@ -9,10 +9,7 @@ namespace SocialNetworkApp.Extensions
     public static class ApplicationServiceExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
-        {
-            
-          //  services.AddScoped<LogUserActivity>();
-           
+        {          
           //  services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
             {
@@ -25,6 +22,7 @@ namespace SocialNetworkApp.Extensions
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<ClaudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<LogUserActivity>();
             return services;
         }
     }
