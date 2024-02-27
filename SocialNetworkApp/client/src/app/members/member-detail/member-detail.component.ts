@@ -2,82 +2,78 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
-import { TabDirective, TabsModule } from 'ngx-bootstrap/tabs';
+import { TabDirective, TabsModule, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { TimeagoModule } from 'ngx-timeago';
 import { Member } from 'src/app/models/member';
 import { MembersService } from 'src/app/services/members.service';
+import { MemberMessagesComponent } from '../member-messages/member-messages.component';
+import { MessageService } from 'src/app/services/message.service';
+import { Message } from 'src/app/models/message';
+import { Pagination } from 'src/app/models/pagination';
 
 @Component({
   selector: 'app-member-detail',
   templateUrl: './member-detail.component.html',
   styleUrls: ['./member-detail.component.css'],
   standalone: true,
-  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule]
+  imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule, MemberMessagesComponent]
 })
 export class MemberDetailComponent implements OnInit {
-  // @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
-  member: Member | undefined;
+  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
+  member: Member = {} as Member;
   activeTab: TabDirective;
   images: GalleryItem[] = [];
 
-  // messages: Message[] = [];
-  // pagination: Pagination;
-  // container = 'Outbox';
-  // pageNumber = 1;
-  // pageSize = 5;
+  messages: Message[] = [];
+  pagination: Pagination;
+  container = 'Outbox';
+  pageNumber = 1;
+  pageSize = 5;
 
   constructor(
     private memberService: MembersService,
     private route: ActivatedRoute,
-    //private messageService: MessageService
+    private messageService: MessageService
   ) { }
 
   ngOnInit(): void {
-    this.loadMember();
 
-    // this.route.queryParams.subscribe(params => {
-    //   params['tab'] ? this.selectTab(params['tab']) : this.selectTab(0)
-    // })
-  }
+    this.route.data.subscribe({
+      next: data => this.member = data["member"]
+    })
 
-  loadMember() {
+    this.route.queryParams.subscribe(params => {
+      params['tab'] ? this.selectTab(params['tab']) : this.selectTab("Messages")
+    })
 
-    const username = this.route.snapshot.paramMap.get('username');
-    if (!username) return;
-
-    this.memberService.getMember(username).subscribe(
-      member => {
-        this.member = member;
-        this.getImages();
-      }
-    );
-
-
+    this.getImages();
   }
 
   getImages() {
     if (!this.member) return;
     for (const photo of this.member?.photos) {
-      this.images.push(new ImageItem({ src: photo.url, thumb: photo.url}))
+      this.images.push(new ImageItem({ src: photo.url, thumb: photo.url }))
     }
   }
 
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
-    // if (this.activeTab.heading === 'Messages' && this.messages.length === 0) {
-    //   this.loadMessages();
-    // }
+    if (this.activeTab.heading === 'Messages' && this.messages.length === 0) {
+      this.loadMessages();
+    }
   }
 
-  selectTab(tabId: number) {
-    // this.memberTabs.tabs[tabId].active = true;
+  selectTab(heading: string) {
+    if(this.memberTabs){
+      this.memberTabs.tabs.find(x => x.heading === heading)!.active = true;
+    } 
   }
 
-  // loadMessages() {
-  //   this.messageService
-  //     .getMessageThread(this.member.username)
-  //     .subscribe((messages) => {
-  //       this.messages = messages;
-  //     });
-  // }
+  loadMessages() {
+    if (this.member) {
+      this.messageService.getMessageThread(this.member.username).subscribe((messages) => {
+        this.messages = messages;
+      });
+    }
+  }
 }

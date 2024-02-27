@@ -11,6 +11,7 @@ import { TestErrorComponent } from './errors/test-error/test-error.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { preventUnsavedChangesGuard } from './guards/prevent-unsaved-changes.guard';
+import { memberDetailedResolver } from './resolvers/member-detailed.resolver';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,7 +23,7 @@ const routes: Routes = [
       { path: 'members', component: MemberListComponent },
       {
         path: 'members/:username', component: MemberDetailComponent,
-        //resolve: { member: MemberDetailedResolver }
+        resolve: { member: memberDetailedResolver }
       },
       {
         path: 'member/edit', component: MemberEditComponent,

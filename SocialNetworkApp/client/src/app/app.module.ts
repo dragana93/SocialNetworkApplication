@@ -42,7 +42,7 @@ import { DateInputComponent } from './forms/date-input/date-input.component';
     MemberCardComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-    DateInputComponent
+    DateInputComponent,
   ],
   imports: [
     BrowserModule,
