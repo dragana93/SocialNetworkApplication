@@ -30,6 +30,8 @@ public class UsersController : BaseApiController
             _photoService = photoService;
     }
 
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<PagedList<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
         {
@@ -48,7 +50,8 @@ public class UsersController : BaseApiController
             return Ok(users);
         }
 
-        [HttpGet("{username}")] //   api/users/2
+    [Authorize(Roles = "Member")]
+    [HttpGet("{username}")] //   api/users/2
         public async Task<ActionResult<MemberDTO>> GetUser(string username)
         {
             return await _userRepository.GetMemberAsync(username);

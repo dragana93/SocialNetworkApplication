@@ -5,15 +5,14 @@ using SocialNetworkApp.Entities;
 
 namespace SocialNetworkApp.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<AppUser, AppRole, int, IdentityUserClaim<int>, 
+                               AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
 
         public DataContext(DbContextOptions options) : base(options)
         {
 
         }
-
-        public DbSet<AppUser> Users { get; set; }
         public DbSet<UserLike> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
 
@@ -21,7 +20,7 @@ namespace SocialNetworkApp.Data
         {
             base.OnModelCreating(builder);
 
-            /*builder.Entity<AppUser>()
+            builder.Entity<AppUser>()
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.User)
                 .HasForeignKey(ur => ur.UserId)
@@ -31,7 +30,7 @@ namespace SocialNetworkApp.Data
                 .HasMany(ur => ur.UserRoles)
                 .WithOne(u => u.Role)
                 .HasForeignKey(ur => ur.RoleId)
-                .IsRequired();*/
+                .IsRequired();
 
             builder.Entity<UserLike>().HasKey(k => new { k.SourceUserId, k.TargetUserId });
 
