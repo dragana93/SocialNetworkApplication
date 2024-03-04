@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GalleryItem, GalleryModule, ImageItem } from 'ng-gallery';
 import { TabDirective, TabsModule, TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -10,6 +10,10 @@ import { MemberMessagesComponent } from '../member-messages/member-messages.comp
 import { MessageService } from 'src/app/services/message.service';
 import { Message } from 'src/app/models/message';
 import { Pagination } from 'src/app/models/pagination';
+import { PresenceService } from 'src/app/services/presence.service';
+import { AccountService } from 'src/app/services/account.service';
+import { User } from 'src/app/models/user';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-member-detail',
@@ -18,7 +22,7 @@ import { Pagination } from 'src/app/models/pagination';
   standalone: true,
   imports: [CommonModule, TabsModule, GalleryModule, TimeagoModule, MemberMessagesComponent]
 })
-export class MemberDetailComponent implements OnInit {
+export class MemberDetailComponent implements OnInit, OnDestroy {
   @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   member: Member = {} as Member;
   activeTab: TabDirective;
@@ -30,11 +34,21 @@ export class MemberDetailComponent implements OnInit {
   pageNumber = 1;
   pageSize = 5;
 
+  user?: User;
+
   constructor(
-    private memberService: MembersService,
+    private accountService: AccountService,
     private route: ActivatedRoute,
-    private messageService: MessageService
-  ) { }
+    private messageService: MessageService,
+    public presenceService: PresenceService
+  ) { 
+
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if(user) this.user = user;
+      }
+    })
+  }
 
   ngOnInit(): void {
 
@@ -58,8 +72,10 @@ export class MemberDetailComponent implements OnInit {
 
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
-    if (this.activeTab.heading === 'Messages' && this.messages.length === 0) {
-      this.loadMessages();
+    if (this.activeTab.heading === 'Messages' && this.user) {
+      this.messageService.createHubConnection(this.user, this.member.username);
+    }else{
+      this.messageService.stopHubConnection();
     }
   }
 
@@ -75,5 +91,9 @@ export class MemberDetailComponent implements OnInit {
         this.messages = messages;
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.messageService.stopHubConnection();
   }
 }

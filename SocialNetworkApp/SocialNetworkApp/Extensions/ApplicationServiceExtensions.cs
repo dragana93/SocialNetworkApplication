@@ -3,6 +3,7 @@ using SocialNetworkApp.Data;
 using SocialNetworkApp.Helpers;
 using SocialNetworkApp.Interfaces;
 using SocialNetworkApp.Services;
+using SocialNetworkApp.SignalR;
 
 namespace SocialNetworkApp.Extensions
 {
@@ -25,6 +26,8 @@ namespace SocialNetworkApp.Extensions
             services.AddScoped<LogUserActivity>();
             services.AddScoped<ILikesRepository, LikesRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddSignalR();
+            services.AddSingleton<PresenceTracker>();
             return services;
         }
     }
