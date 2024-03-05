@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { TimeagoModule } from 'ngx-timeago';
 import { Message } from 'src/app/models/message';
@@ -10,7 +10,8 @@ import { MessageService } from 'src/app/services/message.service';
   selector: 'app-member-messages',
   templateUrl: './member-messages.component.html',
   styleUrls: ['./member-messages.component.css'],
-  imports:[CommonModule, TimeagoModule, FormsModule]
+  imports:[CommonModule, TimeagoModule, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MemberMessagesComponent implements OnInit {
   @ViewChild('messageForm') messageForm?: NgForm;
